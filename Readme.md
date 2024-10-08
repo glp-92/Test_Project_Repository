@@ -78,3 +78,18 @@ jobs:
       run: |
         pytest
 ```
+
+## Proteccion de ramas
+
+Proteger las ramas de develop y main es una forma de evitar inclusion de errores en las mismas y poder revisar el codigo antes de actualizarlas
+
+Para una proteccion minima que exija revision de codigo antes de hacer un `merge` a una rama dada
+
+1. Repositorio en Github => settings => branches => `Add Branch Ruleset`
+2. Rellenar el formulario:
+  - Enforcement status `enabled` para forzar la aplicacion de reglas
+  - Targets => Add Target (añadir ramas) => Include by pattern => `main` y `develop` 
+  - [x] Require a pull request before merging => seleccionar el numero minimo de aprobaciones de codigo (por parte de colaboradores diferentes a los que han realizado la pr)
+
+Para proteger ramas de commits pusheados de forma directa.
+  - [x] Require status checks (los commits se deben "pushear" a otra rama, para despues ser "mergeados" o "pusheados" directamente a una rama que tenga esta regla despues de que los checks hayan sido superados). Seleccionar `jobs` de workflows que se hayan declarado en github actions para el repositorio
