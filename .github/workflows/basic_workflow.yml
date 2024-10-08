@@ -32,6 +32,9 @@ jobs:
     - name: Control de errores en escritura de codigo con Pylint
       run: |
         pylint ./src/main/
+    - name: Control de estilo de codigo con Black
+      run: |
+        black --check --diff ./src/main/ # check no aplica modificaciones, diff muestra en consola las modificaciones propuestas
     - name: Ejecucion de tests con Pytest
       run: |
         pytest

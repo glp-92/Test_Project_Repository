@@ -94,4 +94,41 @@ Para una proteccion minima que exija revision de codigo antes de hacer un `merge
 Para proteger ramas de commits pusheados de forma directa.
   - [x] Require status checks (los commits se deben "pushear" a otra rama, para despues ser "mergeados" o "pusheados" directamente a una rama que tenga esta regla despues de que los checks hayan sido superados). Seleccionar `jobs` de workflows que se hayan declarado en github actions para el repositorio
 
-  De esta forma, se notificara que la rama (por ejemplo feature/...) que se pretende mergear no ha superado la pipeline de tests y si se ha marcado el check como requerido no permitira realizar el merge
+De esta forma, se notificara que la rama (por ejemplo feature/...) que se pretende mergear no ha superado la pipeline de tests y si se ha marcado el check como requerido no permitira realizar el merge
+
+## Git hooks
+
+En el directorio `.git/hooks` se pueden colocar scripts (sh por ejemplo) que modifiquen el comportamiento de git ante ciertas acciones.
+
+### Pre-commit
+
+Para ejecutar un script previo a realizar un commit, el fichero debe tener nombre `pre-commit`
+
+Un ejemplo en `/.git/hooks/pre-commit` que revisa el formato con flake8 y ejecuta un test simple con pytest
+
+```bash
+#!/usr/bin/env bash
+# If any command fails, exit immediately with that command's exit status
+set -eo pipefail
+
+# Activar entorno de Anaconda para poder usar las librerias
+eval "$(conda shell.bash hook)" # Esta linea lanza un hook que exporta las rutas de anaconda y lo hace disponible por el script
+conda activate testenv
+# Otro metodo
+# source /home/glpazos/anaconda3/bin/activate testenv
+
+# Ejecuta flake8 en el directorio raiz
+flake8 . --statistics
+if [ $? -ne 0 ]; then # 
+ echo "Comprobacion flake8 erronea. Abortando el commit."
+ exit 1
+fi
+
+# Ejecuta pytest en el directorio local
+pytest
+if [ $? -ne 0 ]; then # 
+ echo "Comprobacion con pytest erronea. Abortando el commit."
+ exit 1
+fi
+echo "pytest tests resueltos con exito!"
+```
