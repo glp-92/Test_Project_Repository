@@ -102,13 +102,31 @@ En el directorio `.git/hooks` se pueden colocar scripts (sh por ejemplo) que mod
 
 Para ejecutar un script previo a realizar un commit, el fichero debe tener nombre `pre-commit`
 
-Un ejemplo
+Un ejemplo en `/.git/hooks/pre-commit` que revisa el formato con flake8 y ejecuta un test simple con pytest
 
 ```bash
 #!/usr/bin/env bash
-# Si algun comando falla, detiene la ejecucion con el codigo del comando erroneo
+# If any command fails, exit immediately with that command's exit status
 set -eo pipefail
-# Ejecuta la inspeccion de codigo flake
-flake8 .
-echo "flake8 passed!
+
+# Activar entorno de Anaconda para poder usar las librerias
+eval "$(conda shell.bash hook)" # Esta linea lanza un hook que exporta las rutas de anaconda y lo hace disponible por el script
+conda activate testenv
+# Otro metodo
+# source /home/glpazos/anaconda3/bin/activate testenv
+
+# Ejecuta flake8 en el directorio raiz
+flake8 . --statistics
+if [ $? -ne 0 ]; then # 
+ echo "Comprobacion flake8 erronea. Abortando el commit."
+ exit 1
+fi
+
+# Ejecuta pytest en el directorio local
+pytest
+if [ $? -ne 0 ]; then # 
+ echo "Comprobacion con pytest erronea. Abortando el commit."
+ exit 1
+fi
+echo "pytest tests resueltos con exito!"
 ```
