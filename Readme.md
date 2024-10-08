@@ -93,3 +93,5 @@ Para una proteccion minima que exija revision de codigo antes de hacer un `merge
 
 Para proteger ramas de commits pusheados de forma directa.
   - [x] Require status checks (los commits se deben "pushear" a otra rama, para despues ser "mergeados" o "pusheados" directamente a una rama que tenga esta regla despues de que los checks hayan sido superados). Seleccionar `jobs` de workflows que se hayan declarado en github actions para el repositorio
+
+  De esta forma, se notificara que la rama (por ejemplo feature/...) que se pretende mergear no ha superado la pipeline de tests y si se ha marcado el check como requerido no permitira realizar el merge
