@@ -2,12 +2,12 @@
 module info
 """
 
-
+def force_flake_2_fail(): return None 
 def main():
     """
     function info
     """
-    return 1
+    return None
 
 
 if __name__ == "__main__":

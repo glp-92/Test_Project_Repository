@@ -93,3 +93,22 @@ Para una proteccion minima que exija revision de codigo antes de hacer un `merge
 
 Para proteger ramas de commits pusheados de forma directa.
   - [x] Require status checks (los commits se deben "pushear" a otra rama, para despues ser "mergeados" o "pusheados" directamente a una rama que tenga esta regla despues de que los checks hayan sido superados). Seleccionar `jobs` de workflows que se hayan declarado en github actions para el repositorio
+
+## Git hooks
+
+En el directorio `.git/hooks` se pueden colocar scripts (sh por ejemplo) que modifiquen el comportamiento de git ante ciertas acciones.
+
+### Pre-commit
+
+Para ejecutar un script previo a realizar un commit, el fichero debe tener nombre `pre-commit`
+
+Un ejemplo
+
+```bash
+#!/usr/bin/env bash
+# Si algun comando falla, detiene la ejecucion con el codigo del comando erroneo
+set -eo pipefail
+# Ejecuta la inspeccion de codigo flake
+flake8 .
+echo "flake8 passed!
+```
