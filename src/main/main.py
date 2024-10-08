@@ -7,7 +7,7 @@ def main():
     """
     function info
     """
-    return None
+    return 1
 
 
 if __name__ == "__main__":
