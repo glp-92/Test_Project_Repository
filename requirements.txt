@@ -2,3 +2,4 @@ pytest
 pylint
 flake8
 black
+pre-commit
